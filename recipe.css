@@ -1,0 +1,134 @@
+/* General Styling */
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+/* Navbar */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  z-index: 1000; /* Ensure navbar stays on top */
+  display: flex;
+  justify-content: center; /* Centers links horizontally */
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #ddd; /* Lighter hover color */
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.search-bar input {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.search-bar button {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  background-color: #ff8c00;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #e77e00;
+}
+
+/* Main Container */
+.container {
+  margin-top: 120px; /* Adjusted this to avoid content being hidden behind the navbar */
+  padding: 20px;
+}
+
+/* Recipe Styling */
+.recipe {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 15px;
+  text-align: center;
+}
+
+.recipe img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.recipe h3 {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.recipe button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.recipe button:hover {
+  background-color: #218838;
+}
+
+/* Loading Spinner */
+#loadingSpinner {
+  display: none;
+  text-align: center;
+  margin-top: 50px;
+}
+
+#loadingMessage {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Suggested Recipe Link */
+#suggestedRecipe {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+#suggestedRecipe a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#suggestedRecipe a:hover {
+  text-decoration: underline;
+}

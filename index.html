@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Finder</title>
+  <link rel="stylesheet" href="recipe.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation Links -->
+  <nav>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="favorites.html" class="nav-link">Favorites</a>
+    <a href="suggested.html" class="nav-link">Suggested Recipe</a> <!-- Added Suggested Recipe Link -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search recipes..." aria-label="Search recipes">
+      <button>Search</button>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <div class="container">
+    <p id="loadingMessage">Loading popular recipes...</p>
+    <div id="loadingSpinner" style="display:none;">
+      <img src="spinner.gif" alt="Loading...">
+    </div>
+  </div>
+
+  <script src="recipe.js"></script>
+</body>
+</html>
