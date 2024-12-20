@@ -3,29 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Favorites</title>
-  <link rel="stylesheet" href="recipe.css">
+  <title>Favorite Recipes</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navigation Links -->
+  <!-- Navigation bar with links to Home and Favorites pages -->
   <nav>
     <a href="index.html" class="nav-link">Home</a>
     <a href="favorites.html" class="nav-link">Favorites</a>
   </nav>
 
-  <!-- Main Content Container -->
+  <!-- Container for displaying favorite recipes -->
   <div class="container">
     <h2>Your Favorite Recipes</h2>
-    <div id="favoriteRecipesContainer">
-      <!-- Favorite recipes will be displayed here -->
-    </div>
+    <!-- This div will be populated with favorite recipes dynamically -->
+    <div id="favoriteRecipesContainer"></div>
   </div>
 
-  <!-- Loading Spinner -->
-  <div id="loadingSpinner" style="display: none;">
-    <img src="spinner.gif" alt="Loading...">
-  </div>
-
+  <!-- JavaScript file for handling the functionality of the Favorites page -->
   <script src="favorites.js"></script>
 </body>
 </html>

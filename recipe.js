@@ -1,164 +1,50 @@
-const recipeContainer = document.querySelector('.container');
-const searchButton = document.querySelector('button');
-const searchInput = document.querySelector('input[type="text"]');
-const favoriteRecipesContainer = document.getElementById('favoriteRecipesContainer');
-const loadingMessage = document.getElementById('loadingMessage');
-const loadingSpinner = document.getElementById('loadingSpinner');
+// Fetch recipe details on recipe.html page load
+async function getRecipeDetails() {
+  // Get the query parameters from the current URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const recipeId = urlParams.get('id'); // Extract the recipe ID from the URL query string
 
-// Function to fetch popular recipes (Home page)
-const getPopularRecipes = async () => {
-  const url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=American`; // Example category: American meals
-  try {
-    loadingMessage.textContent = 'Loading popular recipes...';
-    loadingSpinner.style.display = 'block';
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.meals && data.meals.length > 0) {
-      displayRecipes(data.meals);
-    } else {
-      recipeContainer.innerHTML = '<p>No popular recipes found. Try again later.</p>';
-    }
-  } catch (error) {
-    console.error('Error fetching popular recipes:', error);
-    recipeContainer.innerHTML = '<p>There was an error fetching the recipes. Please try again later.</p>';
-  } finally {
-    loadingSpinner.style.display = 'none';
+  // If no recipe ID is found in the URL, display an error message
+  if (!recipeId) {
+    document.getElementById('recipeDetails').innerHTML = '<p>No recipe ID found.</p>';
+    return;
   }
-};
-
-// Function to fetch random recipes (for the suggested recipes on the Favorites page)
-const getRandomMeals = async () => {
-  const url = `https://www.themealdb.com/api/json/v1/1/random.php`;
 
   try {
-    loadingMessage.textContent = 'Loading suggested recipes...';
-    loadingSpinner.style.display = 'block';
-
-    const response = await fetch(url);
+    // Fetch recipe details from the API using the recipe ID
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`);
     const data = await response.json();
 
+    // Check if recipe data exists
     if (data.meals && data.meals.length > 0) {
-      displayRecipes(data.meals);
-    } else {
-      recipeContainer.innerHTML = '<p>No suggested recipes found. Try again later.</p>';
-    }
-  } catch (error) {
-    console.error('Error fetching suggested recipes:', error);
-    recipeContainer.innerHTML = '<p>There was an error fetching suggested recipes. Please try again later.</p>';
-  } finally {
-    loadingSpinner.style.display = 'none';
-  }
-};
+      const recipe = data.meals[0]; // Extract the first recipe from the response
+      const recipeDetails = document.getElementById('recipeDetails'); // Get the recipe details container
 
-// Function to display recipes on the page
-const displayRecipes = (recipes) => {
-  recipeContainer.innerHTML = ''; // Clear previous results
-
-  if (recipes.length === 0) {
-    recipeContainer.innerHTML = '<p>No recipes found.</p>';
-  } else {
-    recipes.forEach(recipe => {
-      const recipeElement = document.createElement('div');
-      recipeElement.classList.add('recipe');
-      recipeElement.innerHTML = `
-        <h3>${recipe.strMeal}</h3>
-        <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
-        <a href="https://www.themealdb.com/meal/${recipe.idMeal}" target="_blank">See Recipe</a>
-        <button onclick="saveToFavorites(${JSON.stringify(recipe)})">Add to Favorites</button>
+      // Display the recipe details in the HTML
+      recipeDetails.innerHTML = `
+        <h2>${recipe.strMeal}</h2>
+        <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}">
+        <p><strong>Category:</strong> ${recipe.strCategory}</p>
+        <p><strong>Cuisine:</strong> ${recipe.strArea}</p>
+        <h3>Ingredients</h3>
+        <ul>
+          ${Object.keys(recipe)
+            .filter(key => key.startsWith('strIngredient') && recipe[key]) // Filter out ingredient keys
+            .map(key => `<li>${recipe[key]} - ${recipe[`strMeasure${key.slice(13)}`]}</li>`) // Display ingredient and measurement
+            .join('')} <!-- Join the list of ingredients into an unordered list -->
+        </ul>
+        <h3>Instructions</h3>
+        <p>${recipe.strInstructions}</p> <!-- Display cooking instructions -->
       `;
-
-      recipeContainer.appendChild(recipeElement);
-    });
-  }
-};
-
-// Function to save a recipe to favorites
-const saveToFavorites = (meal) => {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  
-  // Check if the recipe is already in the favorites
-  if (!favorites.some(fav => fav.idMeal === meal.idMeal)) {
-    favorites.push(meal);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    alert('Recipe added to favorites!');
-  } else {
-    alert('This recipe is already in your favorites!');
-  }
-};
-
-// Function to display favorite recipes on the Favorites page
-const displayFavorites = () => {
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-  if (favorites.length > 0) {
-    favoriteRecipesContainer.innerHTML = ''; // Clear previous favorites
-
-    favorites.forEach(meal => {
-      const mealElement = document.createElement('div');
-      mealElement.classList.add('recipe');
-      mealElement.innerHTML = `
-        <h3>${meal.strMeal}</h3>
-        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
-        <a href="https://www.themealdb.com/meal/${meal.idMeal}" target="_blank">See Recipe</a>
-      `;
-
-      favoriteRecipesContainer.appendChild(mealElement);
-    });
-  } else {
-    favoriteRecipesContainer.innerHTML = '<p>No favorites found. Here are some suggested recipes:</p>';
-    getRandomMeals(); // Load random recipes if no favorites
-  }
-};
-
-// Event listener for the search button
-searchButton.addEventListener('click', () => {
-  const ingredients = searchInput.value.trim();
-  if (ingredients) {
-    getMealsByIngredient(ingredients);
-  } else {
-    recipeContainer.innerHTML = '<p>Please enter ingredients to search.</p>';
-  }
-});
-
-// Event listener for Enter key on search input
-searchInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    searchButton.click();
-  }
-});
-
-// Function to fetch meals based on ingredients (search functionality)
-const getMealsByIngredient = async (ingredient) => {
-  const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
-
-  try {
-    loadingMessage.textContent = 'Searching for recipes...';
-    loadingSpinner.style.display = 'block';
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.meals && data.meals.length > 0) {
-      displayRecipes(data.meals);
     } else {
-      recipeContainer.innerHTML = '<p>No recipes found for this ingredient. Try again with different ingredients.</p>';
+      document.getElementById('recipeDetails').innerHTML = '<p>Recipe not found.</p>'; // Display message if no recipe found
     }
   } catch (error) {
-    console.error('Error fetching meals:', error);
-    recipeContainer.innerHTML = '<p>There was an error fetching the recipes. Please try again later.</p>';
-  } finally {
-    loadingSpinner.style.display = 'none';
+    // Catch any errors that occur during the fetch request
+    console.error('Error fetching recipe details:', error);
+    document.getElementById('recipeDetails').innerHTML = '<p>Error loading recipe details.</p>'; // Display error message if fetch fails
   }
-};
-
-// Fetch popular recipes on the Home page load
-if (window.location.pathname.includes('index.html')) {
-  getPopularRecipes();
 }
 
-// Display favorite recipes on the Favorites page load
-if (window.location.pathname.includes('favorites.html')) {
-  displayFavorites();
-}
+// Call the function to load the recipe details once the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', getRecipeDetails);

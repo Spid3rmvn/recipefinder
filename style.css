@@ -1,0 +1,186 @@
+/* Body styling */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+  font-size: 1rem;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Navigation bar styling */
+nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1f1f1f;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+/* Navigation link styling */
+.nav-link {
+  color: #e0e0e0;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+/* Hover effect for navigation links */
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Search bar layout */
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Search input field styling */
+.search-bar input {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #121212;
+  color: #e0e0e0;
+  width: 250px;
+}
+
+/* Search button styling */
+.search-bar button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff4081;
+  color: white;
+  cursor: pointer;
+}
+
+/* Recipe container layout */
+.container {
+  margin-top: 5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Recipe card styling */
+.recipe {
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Hover effect for recipe cards */
+.recipe:hover {
+  transform: translateY(-4px);
+}
+
+/* Recipe title styling */
+.recipe h3 {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Recipe image styling */
+.recipe img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+/* Recipe actions layout (favorite button, view button) */
+.recipe-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+/* Favorite button styling */
+.favorite-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #64ffda;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* View recipe button styling */
+.view-recipe-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin-top: 1rem;
+}
+
+/* Hover effect for view recipe button */
+.view-recipe-btn:hover {
+  background-color: #64ffda;
+}
+
+/* Modal container styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s;
+}
+
+/* Modal content styling */
+.modal-content {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+/* Close button in the modal */
+.modal-content .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Modal visibility when active */
+.modal.visible {
+  visibility: visible;
+}
