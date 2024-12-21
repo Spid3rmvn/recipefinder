@@ -2,6 +2,9 @@
 const API_URL = 'https://www.themealdb.com/api/json/v1/1';
 let currentRecipes = [];
 
+// Clear existing favorites on page load
+localStorage.removeItem('favorites');
+
 // Get recipes from API
 async function getRecipes(url) {
     try {
@@ -44,6 +47,7 @@ function displayRecipes(recipes) {
             <h3>${recipe.strMeal}</h3>
             <button onclick="viewRecipe('${recipe.idMeal}')">View Recipe</button>
             <button onclick="toggleFavorite('${recipe.idMeal}')" 
+                    class="favorite-btn"
                     style="background-color: ${isFavorite(recipe.idMeal) ? '#ff4444' : '#666'}">
                 ${isFavorite(recipe.idMeal) ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
@@ -90,12 +94,15 @@ function closePopup() {
 // Handle favorites
 function toggleFavorite(id) {
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const recipe = currentRecipes.find(r => r.idMeal === id);
+    const recipe = currentRecipes.find(r => r.idMeal === id) || 
+                  favorites.find(f => f.idMeal === id);
+
+    if (!recipe) return;
 
     if (isFavorite(id)) {
         favorites = favorites.filter(f => f.idMeal !== id);
         alert('Removed from favorites!');
-    } else if (recipe) {
+    } else {
         favorites.push({
             idMeal: recipe.idMeal,
             strMeal: recipe.strMeal,
@@ -105,7 +112,11 @@ function toggleFavorite(id) {
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites));
-    displayRecipes(currentRecipes);
+    
+    // Update the current view
+    const currentView = document.getElementById('favoritesList').style.display === 'grid' 
+        ? showFavorites()
+        : displayRecipes(currentRecipes);
 }
 
 // Check if recipe is favorite
@@ -136,7 +147,9 @@ function showFavorites() {
             <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}">
             <h3>${recipe.strMeal}</h3>
             <button onclick="viewRecipe('${recipe.idMeal}')">View Recipe</button>
-            <button onclick="toggleFavorite('${recipe.idMeal}')" style="background-color: #ff4444">
+            <button onclick="toggleFavorite('${recipe.idMeal}')" 
+                    class="favorite-btn"
+                    style="background-color: #ff4444">
                 Remove from Favorites
             </button>
         </div>
